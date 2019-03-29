@@ -16,9 +16,27 @@
     var delta = 0;
     var lastFrameTimeMs = 0;
     var timeStep = 1000 / 240;
-    
+
     const ORIGINAL_SPEED = 0.3;
     const MAX_SPEED = ORIGINAL_SPEED * 3;
+    const BRICK_W = 100;
+    const BRICK_H = 50;
+    const BRICK_W_OFFSET = 2;
+
+    const BRICK_COUNT = 8;
+    const BRICKS_PER_LINE = 8;
+
+    var brickGrid = new Array(BRICK_COUNT);
+    //init brickgrid with true
+    for(var i = 0; i < BRICK_COUNT; ++i){
+      brickGrid[i] = true;
+    }
+
+    var myText = {
+      x: 0,
+      y: 0,
+      text: `${this.x}, ${this.y}`,
+    }
 
     var ball = {
       x: 0,
@@ -32,10 +50,10 @@
         ball.xSpeed = ORIGINAL_SPEED;
         ball.ySpeed = ORIGINAL_SPEED;
       },
-      setXSpeed : (speed) =>{
+      setXSpeed: (speed) => {
         var newSpeed = speed;
-        if(newSpeed > MAX_SPEED) newSpeed = MAX_SPEED;
-        if(newSpeed < -MAX_SPEED) newSpeed = -MAX_SPEED;
+        if (newSpeed > MAX_SPEED) newSpeed = MAX_SPEED;
+        if (newSpeed < -MAX_SPEED) newSpeed = -MAX_SPEED;
         ball.xSpeed = newSpeed;
       },
 
@@ -82,11 +100,11 @@
           x: ball.x - closeX,
           y: ball.y - closeY,
           //ball.subtr(Vec2(closeX, closeY));
-          magSq : ()=>{
+          magSq: () => {
             return dist.x * dist.x + dist.y * dist.y;
           },
         };
-        
+
         return dist.magSq() <= ball.radius * ball.radius; //detecta borda
 
 
@@ -122,7 +140,7 @@
         return;
       }
       delta += timeStamp - lastFrameTimeMs;
-      
+
       lastFrameTimeMs = timeStamp;
       while (delta >= timeStep) {
         moveEverything(timeStep);
@@ -143,6 +161,11 @@
         var mousePos = calculateMousePos(evt);
         //Add here logic to change the vertical position of the paddle according to the mouse position
         paddle.x = mousePos.x - paddle.width / 2;
+
+        //move text
+        myText.x = mousePos.x;
+        myText.y = mousePos.y;
+        myText.text = `${myText.x}, ${myText.y}`;
       });
 
     }
@@ -173,8 +196,8 @@
     }
 
     function moveEverything(deltaP) {
-      //Add here logic for moving things
-      
+      //Add here logic for moving thingsblue
+
       //check right bound
       if (ball.x > canvas.width - ball.radius)
         ball.xSpeed = (ball.xSpeed > 0) ? -ball.xSpeed : ball.xSpeed;
@@ -196,7 +219,9 @@
       }
       ball.x += ball.xSpeed * deltaP;
       ball.y += ball.ySpeed * deltaP;
-      
+
+
+
 
     }
 
@@ -211,21 +236,57 @@
       //ball
       colorCircle(ball.x, ball.y, ball.radius, "white");
 
+      //text
+      colorText(myText.text, myText.x, myText.y, "white");
+      drawBricks();
+
     }
 
-    function recalculateSpeed(){
-      var paddleXCenter = paddle.x + (paddle.width /2);
+    function drawBricks() {
+      
+
+        for(var counter = 0; counter < brickGrid.length; counter++){
+          var line = Math.floor(counter / BRICKS_PER_LINE);
+          if(brickGrid[counter])
+            colorRect(BRICK_W * counter, 0, BRICK_W - BRICK_W_OFFSET, BRICK_H, "red");
+        }
+      
+      
+      /*
+
+      if(brickGrid[0])
+        colorRect(BRICK_W * 0, 0, BRICK_W - BRICK_W_OFFSET, BRICK_H, "red");
+      if(brickGrid[1])
+      colorRect(BRICK_W * 1, 0, BRICK_W - BRICK_W_OFFSET, BRICK_H, "red");
+      if(brickGrid[2])
+      colorRect(BRICK_W * 2, 0, BRICK_W - BRICK_W_OFFSET, BRICK_H, "red");
+      if(brickGrid[32])
+      colorRect(BRICK_W * 3, 0, BRICK_W - BRICK_W_OFFSET, BRICK_H, "red");
+      */
+    }
+
+    function getRandomColor() {
+      var letters = '0123456789ABCDEF';
+      var color = '#';
+      for (var i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+      }
+      return color;
+    }
+
+    function recalculateSpeed() {
+      var paddleXCenter = paddle.x + (paddle.width / 2);
       var distance = ball.x - paddleXCenter;
-      ball.setXSpeed(map(distance, -paddle.width/2, paddle.width/2, -MAX_SPEED, MAX_SPEED ));
+      ball.setXSpeed(map(distance, -paddle.width / 2, paddle.width / 2, -MAX_SPEED, MAX_SPEED));
     }
 
-    function map(value, 
-                 istart, 
-                 istop, 
-                 ostart, 
-                 ostop) {
-    return ostart + (ostop - ostart) * ((value - istart) / (istop - istart));
-}
+    function map(value,
+      istart,
+      istop,
+      ostart,
+      ostop) {
+      return ostart + (ostop - ostart) * ((value - istart) / (istop - istart));
+    }
 
   </script>
 
