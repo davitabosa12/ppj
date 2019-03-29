@@ -1,0 +1,235 @@
+<!-- DAVI TABOSA -->
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+  <meta content="text/html; charset=windows-1252" http-equiv="Content-Type">
+  <meta content="utf-8" http-equiv="encoding">
+</head>
+
+<body>
+  <canvas id="gameCanvas" width="800" height="600"></canvas>
+
+  <script>
+
+    var delta = 0;
+    var lastFrameTimeMs = 0;
+    var timeStep = 1000 / 240;
+    
+    const ORIGINAL_SPEED = 0.3;
+    const MAX_SPEED = ORIGINAL_SPEED * 3;
+
+    var ball = {
+      x: 0,
+      y: 0,
+      radius: 15,
+      xSpeed: 5,
+      ySpeed: 5,
+      reset: () => {
+        ball.x = canvas.width / 2;
+        ball.y = canvas.height / 2;
+        ball.xSpeed = ORIGINAL_SPEED;
+        ball.ySpeed = ORIGINAL_SPEED;
+      },
+      setXSpeed : (speed) =>{
+        var newSpeed = speed;
+        if(newSpeed > MAX_SPEED) newSpeed = MAX_SPEED;
+        if(newSpeed < -MAX_SPEED) newSpeed = -MAX_SPEED;
+        ball.xSpeed = newSpeed;
+      },
+
+      overlaps: (paddle) => {
+        var closeX = ball.x, closeY = ball.y;
+
+
+
+
+        /*if (ball.x + ball.radius > paddle.x) {
+          if (ball.y + ball.radius > paddle.y) {
+            if (ball.x - ball.radius < paddle.x + paddle.width) {
+              if (ball.y - ball.radius < paddle.y + paddle.height) {
+                return true;
+              }
+            }
+          }
+        }
+        return false;*/
+
+
+
+        var closeX = ball.x, closeY = ball.y;
+        var min = {
+          x: paddle.x,
+          y: paddle.y,
+        };
+        var max = {
+          x: paddle.x + paddle.width,
+          y: paddle.y + paddle.height,
+        };
+
+        if (ball.x < min.x)
+          closeX = min.x;
+        else if (ball.x > max.x)
+          closeX = max.x;
+
+        if (ball.y < min.y)
+          closeY = min.y;
+        else if (ball.y > max.y)
+          closeY = max.y;
+
+        var dist = {
+          x: ball.x - closeX,
+          y: ball.y - closeY,
+          //ball.subtr(Vec2(closeX, closeY));
+          magSq : ()=>{
+            return dist.x * dist.x + dist.y * dist.y;
+          },
+        };
+        
+        return dist.magSq() <= ball.radius * ball.radius; //detecta borda
+
+
+      },
+    };
+
+    var paddle = {
+      x: 0,
+      y: 0,
+      width: 150,
+      height: 15
+    };
+
+    // save the canvas for dimensions, and its 2d context for drawing to it
+    var canvas, canvasContext;
+
+    function calculateMousePos(evt) {
+      var rect = canvas.getBoundingClientRect(), root = document.documentElement;
+
+      // account for the margins, canvas position on page, scroll amount, etc.
+      var mouseX = evt.clientX - rect.left - root.scrollLeft;
+      var mouseY = evt.clientY - rect.top - root.scrollTop;
+      return {
+        x: mouseX,
+        y: mouseY
+      };
+    }
+
+
+    function mainLoop(timeStamp) {
+      if (timeStamp < lastFrameTimeMs + timeStep) {
+        requestAnimationFrame(mainLoop);
+        return;
+      }
+      delta += timeStamp - lastFrameTimeMs;
+      
+      lastFrameTimeMs = timeStamp;
+      while (delta >= timeStep) {
+        moveEverything(timeStep);
+        delta -= timeStep;
+      }
+      drawEverything();
+      requestAnimationFrame(mainLoop);
+    }
+
+    window.onload = function () {
+      canvas = document.getElementById('gameCanvas');
+      canvasContext = canvas.getContext('2d');
+      init();
+
+      requestAnimationFrame(mainLoop);
+
+      canvas.addEventListener('mousemove', function (evt) {
+        var mousePos = calculateMousePos(evt);
+        //Add here logic to change the vertical position of the paddle according to the mouse position
+        paddle.x = mousePos.x - paddle.width / 2;
+      });
+
+    }
+
+    function init() {
+      paddle.y = canvas.height - 30;
+      ball.reset();
+    }
+
+    //Draws a rectangle
+    function colorRect(topLeftX, topLeftY, boxWidth, boxHeight, fillColor) {
+      canvasContext.fillStyle = fillColor;
+      canvasContext.fillRect(topLeftX, topLeftY, boxWidth, boxHeight);
+    }
+
+    //Draws a circle
+    function colorCircle(centerX, centerY, radius, fillColor) {
+      canvasContext.fillStyle = fillColor;
+      canvasContext.beginPath();
+      canvasContext.arc(centerX, centerY, radius, 0, Math.PI * 2, true);
+      canvasContext.fill();
+    }
+
+    //Draws a text
+    function colorText(showWords, textX, textY, fillColor) {
+      canvasContext.fillStyle = fillColor;
+      canvasContext.fillText(showWords, textX, textY);
+    }
+
+    function moveEverything(deltaP) {
+      //Add here logic for moving things
+      
+      //check right bound
+      if (ball.x > canvas.width - ball.radius)
+        ball.xSpeed = (ball.xSpeed > 0) ? -ball.xSpeed : ball.xSpeed;
+      //check left bound
+      if (ball.x < ball.radius)
+        ball.xSpeed = (ball.xSpeed < 0) ? -ball.xSpeed : ball.xSpeed;
+      //check up bound
+      if (ball.y < ball.radius)
+        ball.ySpeed = (ball.ySpeed < 0) ? -ball.ySpeed : ball.ySpeed;
+
+      //check down bound
+      if (ball.y > canvas.height)
+        ball.reset();
+
+      //check ball collision
+      if (ball.overlaps(paddle)) {
+        ball.ySpeed = (ball.ySpeed > 0) ? -ball.ySpeed : ball.ySpeed;
+        recalculateSpeed();
+      }
+      ball.x += ball.xSpeed * deltaP;
+      ball.y += ball.ySpeed * deltaP;
+      
+
+    }
+
+
+    function drawEverything() {
+      // clear the game view by filling it with black
+      colorRect(0, 0, canvas.width, canvas.height, 'black');
+
+      //Add here logic for drawing things
+      //paddle
+      colorRect(paddle.x, paddle.y, paddle.width, paddle.height, "white");
+      //ball
+      colorCircle(ball.x, ball.y, ball.radius, "white");
+
+    }
+
+    function recalculateSpeed(){
+      var paddleXCenter = paddle.x + (paddle.width /2);
+      var distance = ball.x - paddleXCenter;
+      ball.setXSpeed(map(distance, -paddle.width/2, paddle.width/2, -MAX_SPEED, MAX_SPEED ));
+    }
+
+    function map(value, 
+                 istart, 
+                 istop, 
+                 ostart, 
+                 ostop) {
+    return ostart + (ostop - ostart) * ((value - istart) / (istop - istart));
+}
+
+  </script>
+
+
+</body>
+
+</html>
