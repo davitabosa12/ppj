@@ -1,0 +1,25 @@
+DAVI TABOSA
+
+- rowColToArrayIndex:
+
+	Uma função que possui dois argumentos: col e row. A função converte os argumentos em um índice do array. O indice também é determinado pelo número de tijolos por linha.
+
+
+
+- ballMove:
+
+	Procedimento que controla o movimento da bola de acordo com o tempo de renderização "deltaTime". A bola deve inverter o sentido horizontal caso atinja as bordas laterais e inverter o sentido vertical caso atinja a borda superior. Caso a bola escape pela borda inferior, a posição e a magnitude da velocidade é resetada.
+
+
+
+- ballBrickHandling:
+
+	Procedimento que cuida da colisão da bola com um tijolo. Nas linhas 108 e 109 há uma conversão de coordenadas de tela para coordenadas normalizadas, que cada unidade representa a posição de um tijolo na tela. A linha 110 converte as coordenadas normalizadas em indices do array de tijolos utilizando a função "rowToArrayIndex". 
+	Na linha 112 existe uma verificação se as coordenadas normalizadas estão dentro da área onde os tijolos estão. Se este teste passar, uma outra condição verifica se um tijolo ainda existe na cena. Se existir, a bola rebate no tijolo e o tijolo atingido desaparece.
+
+
+
+- ballPaddleHandling:
+
+	Procedimento que cuida da colisão da bola com o paddle. Linhas 124 à 127 são cálculos feitos para obter as bordas do paddle. Linha 128 é uma verificação de colisão entre um retângulo (paddle) e um círculo (bola). Caso a colisão ocorra, inverte o sentido da bola. 
+	Depois disto, é calculado a nova velocidade da bola. O cálculo é feito baseado na distância horizontal entre o centro do paddle e o centro da bola. Caso a bola atinja a borda da direita, a bola irá para a direita. O mesmo acontece caso atinja a borda da esquerda. Quanto mais perto da borda, mais rápido a bola vai se mover.
