@@ -1,13 +1,3 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head>
-	<meta content="text/html; charset=windows-1252" http-equiv="Content-Type">
-	<meta content="utf-8" http-equiv="encoding">
-</head>
-
-<body>
-<canvas id="gameCanvas" width="800" height="600"></canvas>
-
-<script>
 var ballX = 400;
 var ballY = 300;
 var ballSpeedX = 0.15, ballSpeedY = 0.2;  
@@ -209,8 +199,3 @@ function colorText(showWords, textX,textY, fillColor) {
 	canvasContext.fillStyle = fillColor;
 	canvasContext.fillText(showWords, textX, textY);
 }
-
-</script>
-
-
-</body></html>
