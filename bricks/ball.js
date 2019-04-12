@@ -1,43 +1,55 @@
-var ballX = 400;
-var ballY = 300;
-var ballSpeedX = 0.15, ballSpeedY = 0.2;  
-var originalBallSpeedX = ballSpeedX;
 
+class Ball{
+    constructor(x, y, speedX, speedY){
+        this.posX = x || 400;
+        this.posY = y || 300;
+        this.speedX = speedX || 0.15;
+        this.speedY = speedY || 0.2;
+        this.originalSpeedX = this.speedX;
+        this.lastCol = Math.floor(this.posX / BRICK_W);
+        this.lastRow = Math.floor(this.posY / BRICK_H); 
+        this.trails = [];
+    }
 
-function drawBall(){
-    colorCircle(ballX,ballY, 10, 'white'); // draw ball
+    draw(){
+        for(var i = 0; i < this.trails.length; i++){
+            
+            colorCircle(this.trails[i].x, this.trails[i].y, 10, "#FF0000" + i.toString(16));
+        }
+        colorCircle(this.posX,this.posY, 10, 'white'); // draw ball
+    }
+    reset(){
+        this.posX = canvas.width / 2;
+        this.posY = canvas.height / 2;
+    }
+    move(deltaTime){
+        this.posX += this.speedX*deltaTime;
+        this.posY += this.speedY*deltaTime;
+
+        if(this.posX < 0) { //left
+            this.speedX *= -1;
+        }
+        if(this.posX > canvas.width) { // right
+            this.speedX *= -1;
+        }
+        if(this.posY < 0) { // top
+            this.speedY *= -1;
+        }
+        if(this.posY > canvas.height) { // bottom
+            this.speedY *= -1;
+            //this.reset();
+        }
+        this.trails.push({x: this.posX, y: this.posY});
+        while(this.trails.length > 90){
+            this.trails.splice(0,1);
+        }
+    }
 }
 
 
-function ballReset() {
-	ballX = canvas.width/2;
-	ballY = canvas.height/2;
-}
-
-
-function ballMove(deltaTime) {
-	ballX += ballSpeedX*deltaTime;
-	ballY += ballSpeedY*deltaTime;
-
-	if(ballX < 0) { //left
-		ballSpeedX *= -1;
-	}
-	if(ballX > canvas.width) { // right
-		ballSpeedX *= -1;
-	}
-	if(ballY < 0) { // top
-		ballSpeedY *= -1;
-	}
-	if(ballY > canvas.height) { // bottom
-		ballReset();
-	}
-}
-
-var ballLastCol = Math.floor(ballX / BRICK_W);
-var ballLastRow = Math.floor(ballY / BRICK_H);
-
-function ballBrickHandling(deltaTime) {
-	var ballBrickCol = Math.floor(ballX / BRICK_W);
+function ballBrickHandling() {
+	/**
+    var ballBrickCol = Math.floor(ballX / BRICK_W);
 	var ballBrickRow = Math.floor(ballY / BRICK_H);
 	var brickIndexUnderBall = rowColToArrayIndex(ballBrickCol, ballBrickRow);
 
@@ -58,11 +70,13 @@ function ballBrickHandling(deltaTime) {
 		}
 	}
 	ballLastCol = ballBrickCol;
-	ballLastRow = ballBrickRow;
+    ballLastRow = ballBrickRow;
+    **/
 }
 
 function ballPaddleHandling() {
-	var paddleTopEdgeY = canvas.height-PADDLE_DIST_FROM_EDGE;
+	/**
+    var paddleTopEdgeY = canvas.height-PADDLE_DIST_FROM_EDGE;
 	var paddleBottomEdgeY = paddleTopEdgeY + PADDLE_THICKNESS;
 	var paddleLeftEdgeX = paddleX;
 	var paddleRightEdgeX = paddleLeftEdgeX + PADDLE_WIDTH;
@@ -76,23 +90,6 @@ function ballPaddleHandling() {
 		var centerOfPaddleX = paddleX+PADDLE_WIDTH/2;
 		var ballDistFromPaddleCenterX = ballX - centerOfPaddleX;
 		ballSpeedX = ballDistFromPaddleCenterX * originalBallSpeedX/(PADDLE_WIDTH/4);
-	}
-}
-
-
-function colorRect(topLeftX,topLeftY, boxWidth,boxHeight, fillColor) {
-	canvasContext.fillStyle = fillColor;
-	canvasContext.fillRect(topLeftX,topLeftY, boxWidth,boxHeight);
-}
-
-function colorCircle(centerX,centerY, radius, fillColor) {
-	canvasContext.fillStyle = fillColor;
-	canvasContext.beginPath();
-	canvasContext.arc(centerX,centerY, 10, 0,Math.PI*2, true);
-	canvasContext.fill();
-}
-
-function colorText(showWords, textX,textY, fillColor) {
-	canvasContext.fillStyle = fillColor;
-	canvasContext.fillText(showWords, textX, textY);
+    }
+    **/
 }

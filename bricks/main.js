@@ -5,6 +5,10 @@ const BRICK_COLS = 10;
 const BRICK_ROWS = 7;
 var brickGrid = new Array(BRICK_COLS * BRICK_ROWS);
 
+
+var paddle;
+var ball, ball2;
+
 var delta = 0;
 var lastFrameTimeMs = 0;
 var timeStep = 1000/60;
@@ -21,7 +25,7 @@ function updateMousePos(evt) {
 	mouseX = evt.clientX - rect.left - root.scrollLeft;
 	mouseY = evt.clientY - rect.top - root.scrollTop;
 
-	paddleX = mouseX - PADDLE_WIDTH/2;
+	//paddleX = mouseX - PADDLE_WIDTH/2;
 }
 
 function brickReset() {
@@ -53,6 +57,10 @@ window.onload = function() {
 	
 	canvas.addEventListener('mousemove', updateMousePos);
 
+	paddle = new Paddle();
+	ball = new Ball();
+	
+
 	brickReset();
 	// ballReset();
 }
@@ -63,7 +71,9 @@ function rowColToArrayIndex(col, row) {
 
 
 function moveEverything(deltaTime) {
-	ballMove(deltaTime);
+	ball.move(deltaTime);
+	
+	paddle.move(deltaTime);
 	ballBrickHandling(deltaTime);
 	ballPaddleHandling();
 }
@@ -88,9 +98,10 @@ function drawEverything() {
 	clearScreen();
 
 	
-	drawBall();
+	ball.draw();
+	
 
-	drawPaddle();
+	paddle.draw();
 
 	drawBricks();
 }
