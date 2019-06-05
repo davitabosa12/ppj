@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Tank.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Enemy.tscn" type="PackedScene" id=2]
+[ext_resource path="res://BulletSpawner.gd" type="Script" id=3]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="TANK" parent="." instance=ExtResource( 1 )]
+position = Vector2( 569.602, 314.289 )
+
+[node name="Godot" parent="." instance=ExtResource( 2 )]
+position = Vector2( 75.6299, 187.748 )
+
+[node name="Bullets" type="Node2D" parent="."]
+script = ExtResource( 3 )
+
+[node name="container" type="Node2D" parent="Bullets"]
+[connection signal="fire" from="TANK" to="Bullets" method="_on_TANK_fire"]
