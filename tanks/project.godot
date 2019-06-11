@@ -19,6 +19,10 @@ config/name="New Game Project"
 run/main_scene="res://Game.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+gamestate="*res://gamestate.gd"
+
 [input]
 
 ui_fire={

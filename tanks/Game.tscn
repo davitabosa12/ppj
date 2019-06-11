@@ -1,19 +1,56 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://Tank.tscn" type="PackedScene" id=1]
-[ext_resource path="res://Enemy.tscn" type="PackedScene" id=2]
-[ext_resource path="res://BulletSpawner.gd" type="Script" id=3]
+[ext_resource path="res://Enemy.tscn" type="PackedScene" id=1]
+[ext_resource path="res://BulletSpawner.gd" type="Script" id=2]
 
-[node name="Node2D" type="Node2D"]
+[node name="World" type="Node2D"]
 
-[node name="TANK" parent="." instance=ExtResource( 1 )]
-position = Vector2( 569.602, 314.289 )
-
-[node name="Godot" parent="." instance=ExtResource( 2 )]
+[node name="Godot" parent="." instance=ExtResource( 1 )]
 position = Vector2( 75.6299, 187.748 )
 
 [node name="Bullets" type="Node2D" parent="."]
-script = ExtResource( 3 )
+script = ExtResource( 2 )
 
 [node name="container" type="Node2D" parent="Bullets"]
-[connection signal="fire" from="TANK" to="Bullets" method="_on_TANK_fire"]
+
+[node name="spawn_points" type="Node2D" parent="."]
+editor/display_folded = true
+
+[node name="0" type="Position2D" parent="spawn_points"]
+position = Vector2( 240, 121.5 )
+
+[node name="1" type="Position2D" parent="spawn_points"]
+position = Vector2( 904.403, 117.265 )
+
+[node name="2" type="Position2D" parent="spawn_points"]
+position = Vector2( 380.724, 358.474 )
+
+[node name="3" type="Position2D" parent="spawn_points"]
+position = Vector2( 894.959, 468.959 )
+
+[node name="4" type="Position2D" parent="spawn_points"]
+position = Vector2( 110.857, 509.699 )
+
+[node name="5" type="Position2D" parent="spawn_points"]
+position = Vector2( 549.041, 539.77 )
+
+[node name="6" type="Position2D" parent="spawn_points"]
+position = Vector2( 259.066, 559.102 )
+
+[node name="7" type="Position2D" parent="spawn_points"]
+position = Vector2( 583.408, 99.4386 )
+
+[node name="8" type="Position2D" parent="spawn_points"]
+position = Vector2( 776.724, 546.214 )
+
+[node name="9" type="Position2D" parent="spawn_points"]
+position = Vector2( 72.194, 84.4029 )
+
+[node name="10" type="Position2D" parent="spawn_points"]
+position = Vector2( 201.071, 301.347 )
+
+[node name="11" type="Position2D" parent="spawn_points"]
+position = Vector2( 705.842, 333.566 )
+
+[node name="players" type="Node2D" parent="."]
+position = Vector2( 705.842, 333.566 )

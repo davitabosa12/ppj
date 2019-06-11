@@ -12,9 +12,8 @@ func _ready():
 func _on_TANK_fire(tank):
 	print(tank.get_name() + " fired")
 	var bulletInstance = Bullet.instance()
+	bulletInstance.who = tank.get_name()
 	bulletInstance.position = tank.position
 	bulletInstance.rotation = tank.rotation
 	var container = get_node("container")
 	container.add_child(bulletInstance)
-	print(bulletInstance)
-	

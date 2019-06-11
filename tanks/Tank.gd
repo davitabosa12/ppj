@@ -9,11 +9,16 @@ export var rotate_speed= 200
 signal fire
 signal hit
 var screen_size
+var player_name
+
+
+func set_player_name(name):
+	player_name = name
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	screen_size = get_viewport_rect().size
-	
+	connect("fire", get_parent().get_parent().get_node("Bullets"), "_on_TANK_fire", self)
 	pass # Replace with function body.
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
