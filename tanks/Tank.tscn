@@ -22,4 +22,3 @@ texture = ExtResource( 2 )
 script = ExtResource( 3 )
 
 [node name="container" type="Node2D" parent="Bullets"]
-[connection signal="area_entered" from="." to="." method="_on_Area2D_area_entered"]

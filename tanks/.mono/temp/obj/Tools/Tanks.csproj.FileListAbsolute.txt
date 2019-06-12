@@ -1,0 +1,5 @@
+C:\Users\davitabosa\Projetos\ppj\ppj\tanks\.mono\temp\bin\Tools\Tanks.dll
+C:\Users\davitabosa\Projetos\ppj\ppj\tanks\.mono\temp\bin\Tools\Tanks.pdb
+C:\Users\davitabosa\Projetos\ppj\ppj\tanks\.mono\temp\obj\Tools\Tanks.csprojResolveAssemblyReference.cache
+C:\Users\davitabosa\Projetos\ppj\ppj\tanks\.mono\temp\obj\Tools\Tanks.dll
+C:\Users\davitabosa\Projetos\ppj\ppj\tanks\.mono\temp\obj\Tools\Tanks.pdb

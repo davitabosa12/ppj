@@ -168,3 +168,8 @@ func _ready():
 	get_tree().connect("connected_to_server", self, "_connected_ok")
 	get_tree().connect("connection_failed", self, "_connected_fail")
 	get_tree().connect("server_disconnected", self, "_server_disconnected")
+
+
+func trigger_game_over(killed, killer):
+	print(killed + " got killed by "+ killer)
+	pass
