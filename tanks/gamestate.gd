@@ -18,6 +18,7 @@ signal connection_failed()
 signal connection_succeeded()
 signal game_ended()
 signal game_error(what)
+signal winner(player_name)
 
 # Callback from SceneTree
 func _player_connected(id):
@@ -105,7 +106,11 @@ remote func pre_start_game(spawn_points):
 
 remote func post_start_game():
 	get_tree().set_pause(false) # Unpause and unleash the game!
+	alive_players.append(1) # appending network server id (is always 1)
+	for p in players:
+		alive_players.append(p)
 
+var alive_players = []
 var players_ready = []
 
 remote func ready_to_start(id):
@@ -170,6 +175,18 @@ func _ready():
 	get_tree().connect("server_disconnected", self, "_server_disconnected")
 
 
-func trigger_game_over(killed, killer):
+func trigger_game_over(killed, killer, killed_id):
 	print(killed + " got killed by "+ killer)
+	if(get_tree().is_network_server()):
+		alive_players.remove(alive_players.find(killed_id))
+		if(alive_players.size() == 1):
+			#we have a winner
+			for p in players:
+				rpc_id(p, "win", killer)
+			win(killer)
+#
 	pass
+	
+remote func win(winner_name):
+	print("winner " + winner_name)
+	emit_signal("winner", winner_name)

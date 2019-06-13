@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Tank.gd" type="Script" id=1]
 [ext_resource path="res://tank.png" type="Texture" id=2]
@@ -6,6 +6,24 @@
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 120.952, 167.741 )
+
+[sub_resource type="GDScript" id=2]
+script/source = "extends Label
+
+# Declare member variables here. Examples:
+# var a = 2
+# var b = \"text\"
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass # Replace with function body.
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	set_as_toplevel(true)
+	
+	
+"
 
 [node name="Area2D" type="Area2D"]
 script = ExtResource( 1 )
@@ -22,3 +40,11 @@ texture = ExtResource( 2 )
 script = ExtResource( 3 )
 
 [node name="container" type="Node2D" parent="Bullets"]
+
+[node name="Label" type="Label" parent="."]
+margin_left = -18.8333
+margin_top = -45.9883
+margin_right = 21.1667
+margin_bottom = -31.9883
+align = 1
+script = SubResource( 2 )

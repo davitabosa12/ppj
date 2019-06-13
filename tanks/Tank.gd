@@ -10,12 +10,14 @@ signal fire
 var screen_size
 var player_name
 var alive = true
+puppet var puppet_alive = true;
 
 puppet var puppet_rotation_degrees = 0
 puppet var puppet_pos = Vector2()
 
 
 func set_player_name(name):
+	get_node("Label").text = name
 	player_name = name
 
 func get_player_name():
@@ -57,12 +59,8 @@ func _physics_process(delta):
 			puppet_pos = position
 	else:
 		pass
-sync func tank_shoot(tank):
-	if(not is_network_master()):
-		return
-	if(tank.has_method("shoot")):
-		tank.rpc("shoot")
-	pass
+		
+
 
 master func shoot():
 	rpc("fire_the_bullet")
@@ -77,15 +75,8 @@ puppet func fire_the_bullet():
 	
 	get_node("../../Bullets/container").add_child(bulletInstance)
 
-puppet func puppet_kill(killed, killer):
-	gamestate.trigger_game_over(killed, killer)
+remotesync func die(player_name, who):
 	hide()
 	alive = false
 	$CollisionShape2D.disabled = true
-
-master func perform_kill(killed, killer):
-	rpc("puppet_kill", killed, killer)
-	puppet_kill(killed, killer)
-
-
-
+	gamestate.trigger_game_over(player_name, who, get_tree().get_network_unique_id())
